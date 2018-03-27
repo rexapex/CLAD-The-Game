@@ -1,0 +1,31 @@
+{
+    "items": {
+        "0.0.1-001": {
+            "type": "STD",
+            "name": "Sandwich",
+            "examine_text": "A healthy snack",
+            "image": "res/images/sandwich.png"
+        },
+        "0.0.1-002": {
+            "type": "STD",
+            "name": "Wrench",
+            "examine_text": "It would be pain to lose this",
+            "image": "res/images/wrench.png"
+        },
+        "0.0.1-003": {
+            "type": "STD",
+            "name": "A Nasty Surprise",
+            "examine_text": "Tasty...",
+            "image": "res/images/wrench_sandwich.png"
+        }
+    },
+    "combinations": [
+        {
+            "item1": "0.0.1-001",
+            "item2": "0.0.1-002",
+            "items_out": [
+                "0.0.1-003"
+            ]
+        }
+    ]
+}

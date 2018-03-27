@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style type="text/css">
+    #canvas {
+      z-index: -1;
+      position: relative;
+    }
+
+    #menubar {
+        z-index: 0;
+        background:rgba(0.1, 0.1, 0.1, 0.3);
+        position: fixed;
+        width: 100%;
+
+        top: -moz-calc(-9vh + 5px); /* Firefox */
+        top: -webkit-calc(-9vh + 5px); /* WebKit */
+        top: -o-calc(-9vh + 5px); /* Opera */
+        top: calc(-9vh + 5px); /* Standard */
+
+        -webkit-transition: top 0.5s; /* For Safari 3.1 to 6.0 */
+        transition: top 0.5s;
+    }
+
+    #menubar:hover {
+        top: 0;
+    }
+
+    .menubtn {
+        z-index: 0.5;
+        width: 10vh;
+        height: 10vh;
+        opacity: 0.9;
+        border: none !important;
+        background: transparent;
+        background-size: 10vh 10vh;
+    }
+
+    #invent {
+      z-index: 0;
+      background:rgba(0.1, 0.1, 0.1, 0.3);
+      position: fixed;
+      width: 100%;
+
+      bottom: -moz-calc(-9vh + 5px); /* Firefox */
+      bottom: -webkit-calc(-9vh + 5px); /* WebKit */
+      bottom: -o-calc(-9vh + 5px); /* Opera */
+      bottom: calc(-9vh + 5px); /* Standard */
+
+      -webkit-transition: bottom 0.5s; /* For Safari 3.1 to 6.0 */
+      transition: bottom 0.5s;
+    }
+
+    #invent:hover {
+        bottom: 0;
+    }
+
+    .itemslot {
+        z-index: 0.5;
+        width: 10vh;
+        height: 10vh;
+        opacity: 0.9;
+        border: none !important;
+        background: transparent;
+        background-size: 10vh 10vh;
+    }
+
+    .item {
+        z-index: 1;
+        width: 10vh;
+        height: 10vh;
+        border: none !important;
+        background: transparent;
+        background-size: 10vh 10vh;
+        position: absolute;
+    }
+
+    .selecteditem {
+        /* https://stackoverflow.com/questions/12690444/css-border-on-png-image-with-transparent-parts */
+        /* green: #1AFF80, amber: #FFB642, blue: #2ECFFF */
+        -webkit-filter: drop-shadow(2px 1px 0 black) drop-shadow(-1px -1px 0 black);
+        filter: drop-shadow(2px 1px 0 black) drop-shadow(-1px -1px 0 black);
+    }
+ </style>
+<head>
+    <title>OS Point & Click Editor</title>
+</head>
+<body style="background-color:#000000; text-align:center;">
+    <canvas id="canvas" width="1280" height="720"></canvas>
+    <div id="menubar">
+        <button class="menubtn" style="background-image: url(res/editor/exitbtn.png);"></button>
+        <button class="menubtn" style="background-image: url(res/editor/folder.png);"></button>
+        <button class="menubtn" style="background-image: url(res/editor/savebtn.png);"></button>
+    </div>
+    <div id="invent">
+        <button id="posbtn" class="itemslot" style="background-image: url(res/editor/flag.png);"></button>
+        <button id="navbtn" class="itemslot" style="background-image: url(res/editor/graph.png);"></button>
+        <button id="staticbtn" class="itemslot" style="background-image: url(res/editor/static_sprite.png);"></button>
+        <button id="interbtn" class="itemslot" style="background-image: url(res/editor/interactable_sprite.png);"></button>
+        <button id="animbtn" class="itemslot" style="background-image: url(res/editor/animated_sprite.gif);"></button>
+    </div>
+    <script src="editor.js"></script>
+</body>
+</html>

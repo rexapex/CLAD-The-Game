@@ -1,0 +1,11 @@
+{
+    "frames": {
+        "flag": {
+            "frame": {"x": 0, "y": 0, "w": 256, "h": 256},
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {"x": 0, "y": 0, "w": 256, "h": 256},
+            "sourceSize": {"w": 256, "h": 256}
+        }
+    }
+}

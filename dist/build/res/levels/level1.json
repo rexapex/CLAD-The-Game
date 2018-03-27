@@ -1,0 +1,98 @@
+{
+    "name": "Docks",
+    "texture_atlas": "res/atlases/room1.png",
+    "scene_scale": 0.4,
+    "depth_scale_y": 0.9992,
+    "player_start_x": 1252.5,
+    "player_start_y": 755,
+    "player_starts": {
+        "right_door": {
+            "x": 1252.5,
+            "y": 755
+        }
+    },
+    "static_sprites": [
+        {
+            "type": "standard",
+            "image_name": "room1.png",
+            "origin_horizontal": "centre",
+            "origin_vertical": "centre",
+            "x": 0,
+            "y": 0,
+            "scale": 1
+        },
+        {
+            "type": "interactable",
+            "image_name": "bin.png",
+            "origin_horizontal": "centre",
+            "origin_vertical": "centre",
+            "x": -100,
+            "y": 25,
+            "scale": 0.75,
+            "examine_text": "It's a waste of time",
+            "interaction_radius": 250,
+            "click_zone_width": 175,
+            "click_zone_height": 225,
+            "interactions": [
+                {
+                    "type": "receive_item",
+                    "success_text": "An old sandwich, this could come in handy",
+                    "fail_text": "I need that!",
+                    "items_received": [
+                        "0.0.1-001"
+                    ]
+                }
+            ]
+        }
+    ],
+    "navmesh": [
+        {
+            "x1": -1393,
+            "y1": 623.75,
+            "x2": -1597.5,
+            "y2": 881.25,
+            "x3": 50,
+            "y3": 881.25
+        },
+        {
+            "x1": -1393,
+            "y1": 623.75,
+            "x2": 50,
+            "y2": 623.75,
+            "x3": 50,
+            "y3": 881.25
+        },
+        {
+            "x1": -1393,
+            "y1": 623.75,
+            "x2": -975.5,
+            "y2": 91.25,
+            "x3": 50,
+            "y3": 623.75
+        },
+        {
+            "x1": 50,
+            "y1": 91.25,
+            "x2": -975.5,
+            "y2": 91.25,
+            "x3": 50,
+            "y3": 623.75
+        },
+        {
+            "x1": 50,
+            "y1": 623.75,
+            "x2": 1332.5,
+            "y2": 623.75,
+            "x3": 1520,
+            "y3": 881.25
+        },
+        {
+            "x1": 50,
+            "y1": 623.75,
+            "x2": 50,
+            "y2": 881.25,
+            "x3": 1520,
+            "y3": 881.25
+        }
+    ]
+}
