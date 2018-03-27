@@ -13,6 +13,7 @@ import {NavSprite} from "./sprites/NavSprite"
 import {SpriteAnimation} from "./sprites/SpriteAnimation"
 import {TextureAtlas} from "./sprites/TextureAtlas"
 import {PlayerSprite} from "./sprites/PlayerSprite"
+import {NPCSprite} from "./sprites/NPCSprite"
 import {Item} from "./items/Item"
 import {Inventory} from "./items/Inventory"
 
@@ -23,6 +24,7 @@ let levelScale: number;
 let depthScaleY: number;
 let staticSprites = new Array<StaticSprite>();
 let interactableSprites = new Array<InteractableSprite>();
+let npcSprites = new Array<NPCSprite>();
 let playerSprite;
 let navmesh;
 
@@ -60,6 +62,12 @@ function gameLoop() // TODO - split draw into update and draw functions
 
     // draw the sprites which the player can interact with
     for(const sprite of interactableSprites)
+    {
+        sprite.draw(currentTime, deltaTime);
+    }
+
+    // draw the NPC sprites
+    for(const sprite of npcSprites)
     {
         sprite.draw(currentTime, deltaTime);
     }
@@ -203,6 +211,7 @@ window.onload = () =>
         img = levelData.backgroundImg;
         staticSprites = levelData.staticSprites;
         interactableSprites = levelData.interactableSprites;
+        npcSprites = levelData.npcSprites;
         levelScale = levelData.sceneScale ? levelData.sceneScale : 1.0;
         sceneScale = levelScale * canvas.height/880;  // scale based on the canvas size so game fits on screen
         depthScaleY = levelData.depthScaleY;
@@ -256,10 +265,10 @@ function openChatGUI() {
         <img class="playerchathead" src="res/images/player_head.png"></img>
         <label class="chatmsg">Do I know you?</label>
         <button class="chatoption">No, we haven't met</button>
-        <button class="chatoption">Yeah, you're the guy I lent my wrench to</button>
+        <button class="chatoption">Yeah, you have my wrench</button>
         <button class="chatoption">Back</button>
     </div>`;
-    
+
     let chatpanel = document.getElementById("chatpanel_parent");
     if(chatpanel != null) {
         // remove the chat panel if it already exists

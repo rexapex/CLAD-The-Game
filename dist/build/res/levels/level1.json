@@ -11,9 +11,9 @@
             "y": 755
         }
     },
-    "static_sprites": [
+    "sprites": [
         {
-            "type": "standard",
+            "type": "static",
             "image_name": "room1.png",
             "origin_horizontal": "centre",
             "origin_vertical": "centre",
@@ -43,6 +43,50 @@
                     ]
                 }
             ]
+        },
+        {
+            "type": "npc",
+            "atlas": "res/atlases/animated.png",
+            "animations": {
+                "animated": {
+                    "num_frames": 2
+                }
+            },
+            "origin_horizontal": "centre",
+            "origin_vertical": "centre",
+            "x": -750,
+            "y": 25,
+            "scale": 0.75,
+            "examine_text": "I'll put a wrench in his plans!",
+            "interaction_radius": 250,
+            "click_zone_width": 175,
+            "click_zone_height": 225,
+            "conversation": {
+                "first_dialog": {
+                    "type": "continue",
+                    "text": "Hey, do I know you?",
+                    "speaker": "npc",
+                    "next_dialog": {
+                        "type": "option",
+                        "text": "???",
+                        "speaker": "player",
+                        "options": [
+                            {
+                                "text": "Nope",
+                                "dialog": {
+
+                                }
+                            },
+                            {
+                                "text": "Yeah, I gave you that wrench",
+                                "dialog": {
+
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
         }
     ],
     "navmesh": [

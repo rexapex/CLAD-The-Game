@@ -5,6 +5,7 @@ import {Sprite} from "../sprites/Sprite"
 import {StaticSprite} from "../sprites/StaticSprite"
 import {AnimatedSprite} from "../sprites/AnimatedSprite"
 import {InteractableSprite} from "../sprites/InteractableSprite"
+import {NPCSprite} from "../sprites/NPCSprite"
 import {SpriteAnimation} from "../sprites/SpriteAnimation"
 import {NavMesh} from "../collision/NavMesh"
 import {Triangle} from "../collision/Triangle"
@@ -13,6 +14,11 @@ import {ReceiveItemInteraction} from "./ReceiveItemInteraction"
 import {Item} from "../items/Item"
 import {Circle} from "../collision/Circle"
 import {Rectangle} from "../collision/Rectangle"
+import {Conversation} from "../chat/Conversation"
+import {Dialog} from "../chat/Dialog"
+import {ContinueDialog} from "../chat/ContinueDialog"
+import {OptionDialog} from "../chat/OptionDialog"
+import {ReceiveItemDialog} from "../chat/ReceiveItemDialog"
 
 export class Level
 {
@@ -26,10 +32,13 @@ export class Level
                     console.log("error: texture atlas could not be loaded");
                 });
 
+                let allPromises = [textureAtlasPromise];
+
                 // create the sprites
                 let staticSprites = new Array<StaticSprite>();
                 let interactableSprites = new Array<InteractableSprite>();
-                for(const obj of levelData.static_sprites)
+                let npcSprites = new Array<NPCSprite>();
+                for(const obj of levelData.sprites)
                 {
                     if(obj.type == "interactable") {
                         let interactions = new Array<Interaction>();
@@ -46,11 +55,30 @@ export class Level
                         }
                         interactableSprites.push(new InteractableSprite(obj.x, obj.y, obj.scale, obj.origin_horizontal, obj.origin_vertical, atlas, obj.image_name, obj.examine_text,
                                             new Circle(obj.x, obj.y, obj.interaction_radius), new Rectangle(obj.x-obj.click_zone_width/2, obj.y-obj.click_zone_height/2, obj.click_zone_width, obj.click_zone_height), interactions));
+                    } else if(obj.type == "npc") {
+
+                        // load the animations
+                        let atlas = new TextureAtlas(obj.atlas);
+                        let animations: Array<SpriteAnimation> = [];
+                        const atlasLoadedPromise = atlas.load().then(() => {
+                            for(let sequenceName in obj.animations) {
+                                const seq = obj.animations[sequenceName];
+                                const anim = new SpriteAnimation(seq.num_frames, atlas, sequenceName);
+                                animations.push(anim);
+                            }
+
+                            npcSprites.push(new NPCSprite(obj.x, obj.y, obj.scale, obj.origin_horizontal, obj.origin_vertical, animations, obj.examine_text,
+                                                new Circle(obj.x, obj.y, obj.interaction_radius), new Rectangle(obj.x-obj.click_zone_width/2, obj.y-obj.click_zone_height/2, obj.click_zone_width, obj.click_zone_height),
+                                                Level.buildConversation(obj)));
+                        }).catch(() => {
+                            console.log('error: unable to load sprite texture atlas');
+                            reject(null);
+                        });
+                        allPromises.push(atlasLoadedPromise);
                     } else {
                         staticSprites.push(new StaticSprite(obj.x, obj.y, obj.scale, obj.origin_horizontal, obj.origin_vertical, atlas, obj.image_name));
                     }
                 }
-                //let animatedSprites = new Array<AnimatedSprite>();
 
                 // create the navmesh
                 let tris = [];
@@ -59,7 +87,7 @@ export class Level
                 }
                 let navmesh = new NavMesh(tris);
 
-                Promise.all([textureAtlasPromise]).then(() => {
+                Promise.all(allPromises).then(() => {
                     for(const sprite of staticSprites) {
                         sprite.refreshImage();  // texture atlas probably hadn't loaded when sprite was initialised so refresh image
                     }
@@ -71,7 +99,7 @@ export class Level
                     resolve({'textureAtlas': atlas, 'sceneScale': levelData.scene_scale,
                             'playerStartX': levelData.player_start_x, 'playerStartY': levelData.player_start_y, 'playerStarts': levelData.player_starts,
                             'depthScaleY': levelData.depth_scale_y, 'navmesh': navmesh, 'staticSprites': staticSprites,
-                            'interactableSprites': interactableSprites});
+                            'interactableSprites': interactableSprites, 'npcSprites': npcSprites});
                 }).catch(() => {
                     reject(null);
                 });
@@ -80,6 +108,11 @@ export class Level
                 reject(null);
             });
         });
+    }
+
+    private static buildConversation(spriteObj: any): Conversation
+    {
+        return null;
     }
 
     private constructor() {}
