@@ -225,6 +225,8 @@ window.onload = () =>
     }).catch(() => {
         console.log("error: game could not be loaded");
     });
+
+    openChatGUI();
 }
 
 // on window resize change the scale
@@ -245,6 +247,29 @@ function loadPlayerInventory(path: string) {
     //invent.addItem(items["0.0.1-002"]);
     invent.addItem(items["0.0.1-002"]);
     //invent.addItem(items["0.0.1-003"]);
+}
+
+// chat gui
+function openChatGUI() {
+    const html = `
+    <div id="chatpanel">
+        <img class="playerchathead" src="res/images/player_head.png"></img>
+        <label class="chatmsg">Do I know you?</label>
+        <button class="chatoption">No, we haven't met</button>
+        <button class="chatoption">Yeah, you're the guy I lent my wrench to</button>
+        <button class="chatoption">Back</button>
+    </div>`;
+    
+    let chatpanel = document.getElementById("chatpanel_parent");
+    if(chatpanel != null) {
+        // remove the chat panel if it already exists
+        chatpanel.parentNode.removeChild(chatpanel);
+    }
+
+    chatpanel = document.createElement("div");
+    chatpanel.innerHTML = html;
+    chatpanel.id = "chatpanel_parent";
+    document.body.insertBefore(chatpanel, document.getElementById("invent"));
 }
 
 // gui control

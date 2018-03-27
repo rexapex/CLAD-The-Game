@@ -4,8 +4,7 @@
   "description": "Point and click adventure game revolving around CLAD",
   "main": "src/main.ts",
   "dependencies": {
-    "ts-loader": "^4.0.1",
-    "webpack": "^4.0.1"
+    "ts-loader": "^4.0.1"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.0"
