@@ -95,6 +95,7 @@ inputManager.addMouseDownCallback((event: MouseEvent) => {
 
     let interactedWithSprite: boolean = false;
 
+    // check for clicks on interactable (static) sprites
     for(const sprite of interactableSprites)
     {
         if(event.button === 0) {  // left mouse button press
@@ -119,6 +120,27 @@ inputManager.addMouseDownCallback((event: MouseEvent) => {
         } else if(event.button === 2) { // right mouse button press
             if(sprite.inClickZone(x, y)) {
                 // examine the interactable sprite
+                playerSprite.openSpeechBubble(sprite.getExamineText());
+                if(sprite.getExamineAudio() != null) {
+                    sprite.getExamineAudio().play();
+                }
+                interactedWithSprite = true;
+                break;
+            }
+        }
+    }
+
+    // check for clicks on NPC sprites
+    for(const sprite of npcSprites)
+    {
+        if(event.button === 0) {    // left mouse button press
+            if(sprite.inInteractionZone(playerSprite.x, playerSprite.y) && sprite.inClickZone(x, y)) {
+                openChatGUI(sprite.getConversation());
+                interactedWithSprite = true;
+            }
+        } else if(event.button === 2) { // right mouse button press
+            if(sprite.inClickZone(x, y)) {
+                // examine the NPC sprite
                 playerSprite.openSpeechBubble(sprite.getExamineText());
                 if(sprite.getExamineAudio() != null) {
                     sprite.getExamineAudio().play();
@@ -268,15 +290,6 @@ function loadPlayerInventory(path: string) {
 
 // chat gui
 function openChatGUI(conversation: Conversation) {
-    const html = `
-    <div id="chatpanel">
-        <img class="playerchathead" src="res/images/player_head.png"></img>
-        <label class="chatmsg">Do I know you?</label>
-        <button class="chatoption">No, we haven't met</button>
-        <button class="chatoption">Yeah, you have my wrench</button>
-        <button class="chatoption">Back</button>
-    </div>`;
-
     if(conversation != null) {
         let chatpanel = document.getElementById("chatpanel");
         if(chatpanel != null) {
@@ -288,10 +301,41 @@ function openChatGUI(conversation: Conversation) {
         chatpanel.id = "chatpanel";
         document.body.insertBefore(chatpanel, document.getElementById("invent"));
 
+        // create a GUI for the dialog
         let d = conversation.getFirstDialog();
-        if(d != null) {
+        createDialogGUI(chatpanel as HTMLDivElement, d);
 
-        }
+        // add a button for exiting the conversation
+        let exitbtn = document.createElement("button");
+        exitbtn.classList.add("chatbtn");
+        exitbtn.innerHTML = "Exit Conversation";
+        chatpanel.appendChild(exitbtn);
+        exitbtn.onclick = () => {
+            // exit the conversation
+            chatpanel.parentNode.removeChild(chatpanel);
+        };
+    }
+}
+
+function createDialogGUI(chatpanel: HTMLDivElement, d: Dialog) {
+    if(d != null) {
+        chatpanel.innerHTML = "";   // clear the div of previous contents
+        // add the speaker image based on whether player or npc is speaking
+        let speakerimg = document.createElement("img");
+        speakerimg.src = "res/images/player_head.png";
+        speakerimg.classList.add(d.getSpeaker() == "player" ? "playerchathead" : "npcchathead");
+        chatpanel.appendChild(speakerimg);
+
+        // add labels and buttons for this dialog
+        d.createGUIElement(chatpanel).then((nextDialog: Dialog) => {
+            if(nextDialog != null) {
+                // advance to next dialog
+                createDialogGUI(chatpanel, nextDialog);
+            } else {
+                // next dialog is null, therefore, exit conversation
+                chatpanel.parentNode.removeChild(chatpanel);
+            }
+        });
     }
 }
 

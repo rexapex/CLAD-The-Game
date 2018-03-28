@@ -36,7 +36,7 @@ export class InteractableSprite extends StaticSprite
 
     // interact with the sprite
     // item can be null
-    public interact(item: Item): {text: string, items: Array<Item>}
+    public interact(item: Item): {text: string, audio: HTMLAudioElement, items: Array<Item>}
     {
         for(const inter of this.interactions)
         {

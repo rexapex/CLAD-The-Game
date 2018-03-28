@@ -7,13 +7,27 @@ export class ContinueDialog extends Dialog
         super(text, speaker);
     }
 
-    public createGUIElement(div: HTMLDivElement): void
+    public createGUIElement(div: HTMLDivElement): Promise<Dialog>
     {
-        let txt = document.createElement("label");
-        txt.classList.add("chatmsg");
-        txt.innerHTML = this.text;
+        return new Promise<any>((resolve, reject) => {
+            // add the dialog text
+            let txt = document.createElement("label");
+            txt.classList.add("chatmsg");
+            txt.innerHTML = this.text;
 
-        // add all new elements to div
-        div.appendChild(txt);
+            // add a button to advance to the next dialog
+            let btn = document.createElement("button");
+            btn.classList.add("chatbtn");
+            btn.innerHTML = "Continue";
+
+            // add all new elements to div
+            div.appendChild(txt);
+            div.appendChild(btn);
+
+            // add a callback for the continue button
+            btn.onclick = (evnt) => {
+                resolve(this.nextDialog);
+            };
+        });
     }
 }

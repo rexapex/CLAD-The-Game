@@ -2,7 +2,7 @@ export abstract class Dialog
 {
     constructor(protected text: string, protected speaker: string) {}
 
-    public abstract createGUIElement(div: HTMLDivElement): void
+    public abstract createGUIElement(div: HTMLDivElement): Promise<Dialog>
 
     public getText(): string {
         return this.text;

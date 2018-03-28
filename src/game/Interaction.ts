@@ -6,7 +6,7 @@ export abstract class Interaction
     constructor(protected item: Item) {}
 
     // interact with the object
-    public abstract interact(item: Item):  {text: string, items: Array<Item>};
+    public abstract interact(item: Item):  {text: string, audio: HTMLAudioElement, items: Array<Item>};
 
     public getItem(): Item
     {

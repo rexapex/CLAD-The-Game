@@ -56,37 +56,30 @@
             },
             "origin_horizontal": "centre",
             "origin_vertical": "centre",
-            "x": -750,
-            "y": 25,
-            "scale": 0.75,
+            "x": 100,
+            "y": 500,
+            "scale": 1.2,
             "examine_text": "I'll put a wrench in his plans!",
             "examine_audio": "res/audio/eng/clad_voice_lines/I'll put a wrench in his plans.m4a",
-            "interaction_radius": 250,
+            "interaction_radius": 500,
             "click_zone_width": 175,
-            "click_zone_height": 225,
+            "click_zone_height": 550,
             "conversation": {
                 "first_dialog": {
-                    "type": "continue",
+                    "type": "option",
                     "text": "Hey, do I know you?",
                     "speaker": "npc",
-                    "next_dialog": {
-                        "type": "option",
-                        "text": "???",
-                        "speaker": "player",
-                        "options": [
-                            {
-                                "text": "Nope",
-                                "dialog": {
-
-                                }
-                            },
-                            {
-                                "text": "Yeah, I gave you that wrench",
-                                "dialog": {
-
-                                }
-                            }
-                        ]
+                    "options": {
+                        "Nope": {
+                            "type": "continue",
+                            "text": "No, we haven't met",
+                            "speaker": "player"
+                        },
+                        "Yeah": {
+                            "type": "continue",
+                            "text": "Yeah, I gave you that wrench",
+                            "speaker": "player"
+                        }
                     }
                 }
             }

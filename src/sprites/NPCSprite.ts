@@ -16,7 +16,7 @@ export class NPCSprite extends NavSprite
     private readonly BASE_FONT_SIZE = 75;
 
     public constructor(x: number, y: number, scale: number, originHorizontal: string, originVertical: string, anims: Array<SpriteAnimation>,
-                protected examineText: string, protected interactionZone: Circle, protected clickZone: Rectangle, protected conversation: Conversation, moveSpeed: number = 0.5)
+                protected examineText: string, protected examineAudio: HTMLAudioElement, protected interactionZone: Circle, protected clickZone: Rectangle, protected conversation: Conversation, moveSpeed: number = 0.5)
     {
         super(x, y, scale, originHorizontal, originVertical, anims, moveSpeed);
         this.setCurrentAnimation(0);
@@ -58,6 +58,11 @@ export class NPCSprite extends NavSprite
         }
     }
 
+    public getConversation(): Conversation
+    {
+        return this.conversation;
+    }
+
     public inInteractionZone(x: number, y: number): boolean
     {
         return this.interactionZone.contains(x, y);
@@ -71,5 +76,10 @@ export class NPCSprite extends NavSprite
     public getExamineText(): string
     {
         return this.examineText;
+    }
+
+    public getExamineAudio(): HTMLAudioElement
+    {
+        return this.examineAudio;
     }
 }
