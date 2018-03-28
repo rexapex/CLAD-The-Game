@@ -30,6 +30,7 @@
             "y": 25,
             "scale": 0.75,
             "examine_text": "It's a waste of time",
+            "examine_audio": "res/audio/eng/clad_voice_lines/It's a waste of time.m4a",
             "interaction_radius": 250,
             "click_zone_width": 175,
             "click_zone_height": 225,
@@ -37,6 +38,7 @@
                 {
                     "type": "receive_item",
                     "success_text": "An old sandwich, this could come in handy",
+                    "success_audio": "res/audio/eng/clad_voice_lines/An old sandwich. This could come in handy.m4a",
                     "fail_text": "I need that!",
                     "items_received": [
                         "0.0.1-001"
@@ -58,6 +60,7 @@
             "y": 25,
             "scale": 0.75,
             "examine_text": "I'll put a wrench in his plans!",
+            "examine_audio": "res/audio/eng/clad_voice_lines/I'll put a wrench in his plans.m4a",
             "interaction_radius": 250,
             "click_zone_width": 175,
             "click_zone_height": 225,

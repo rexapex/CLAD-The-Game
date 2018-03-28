@@ -50,10 +50,11 @@ export class Level
                                 {
                                     receiveItems.push(items[itm]);
                                 }
-                                interactions.push(new ReceiveItemInteraction(inter.item ? items[inter.item] : null, inter.success_text, inter.fail_text, receiveItems))
+                                interactions.push(new ReceiveItemInteraction(inter.item ? items[inter.item] : null, inter.success_text, inter.fail_text, new Audio(inter.success_audio), new Audio(inter.fail_audio), receiveItems))
                             }
                         }
-                        interactableSprites.push(new InteractableSprite(obj.x, obj.y, obj.scale, obj.origin_horizontal, obj.origin_vertical, atlas, obj.image_name, obj.examine_text,
+
+                        interactableSprites.push(new InteractableSprite(obj.x, obj.y, obj.scale, obj.origin_horizontal, obj.origin_vertical, atlas, obj.image_name, obj.examine_text, new Audio(obj.examine_audio),
                                             new Circle(obj.x, obj.y, obj.interaction_radius), new Rectangle(obj.x-obj.click_zone_width/2, obj.y-obj.click_zone_height/2, obj.click_zone_width, obj.click_zone_height), interactions));
                     } else if(obj.type == "npc") {
 

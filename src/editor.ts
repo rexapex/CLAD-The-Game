@@ -111,7 +111,7 @@ window.onload = () =>
         for(const id in obj.items)
         {
             const itm = obj.items[id];
-            items[id] = new Item(itm.name, itm.examine_text, itm.image);
+            items[id] = new Item(itm.name, itm.examine_text, itm.examine_audio, itm.image);
         }
         for(const id in obj.combinations)
         {

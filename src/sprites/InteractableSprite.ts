@@ -10,7 +10,7 @@ import {Rectangle} from "../collision/Rectangle"
 export class InteractableSprite extends StaticSprite
 {
     constructor(x: number, y: number, scale: number, originHorizontal: string, originVertical: string, atlas: TextureAtlas, imageName: string,
-                protected examineText: string, protected interactionZone: Circle, protected clickZone: Rectangle, protected interactions: Array<Interaction>)
+                protected examineText: string, protected examineAudio: HTMLAudioElement, protected interactionZone: Circle, protected clickZone: Rectangle, protected interactions: Array<Interaction>)
     {
         super(x, y, scale, originHorizontal, originVertical, atlas, imageName);
     }
@@ -57,5 +57,10 @@ export class InteractableSprite extends StaticSprite
     public getExamineText(): string
     {
         return this.examineText;
+    }
+
+    public getExamineAudio(): HTMLAudioElement
+    {
+        return this.examineAudio;
     }
 }

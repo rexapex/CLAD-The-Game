@@ -16,6 +16,10 @@ import {PlayerSprite} from "./sprites/PlayerSprite"
 import {NPCSprite} from "./sprites/NPCSprite"
 import {Item} from "./items/Item"
 import {Inventory} from "./items/Inventory"
+import {Conversation} from "./chat/Conversation"
+import {Dialog} from "./chat/Dialog"
+import {ContinueDialog} from "./chat/ContinueDialog"
+import {OptionDialog} from "./chat/OptionDialog"
 
 let inputManager = new InputManager();
 let img: HTMLImageElement;
@@ -103,6 +107,9 @@ inputManager.addMouseDownCallback((event: MouseEvent) => {
                         invent.addItem(itm);
                         refreshAllItemsDisplayed();
                     }
+                    if(obj.audio != null) {
+                        obj.audio.play();
+                    }
                 } else {
                     playerSprite.openSpeechBubble("That's a rubbish idea!");
                 }
@@ -113,6 +120,9 @@ inputManager.addMouseDownCallback((event: MouseEvent) => {
             if(sprite.inClickZone(x, y)) {
                 // examine the interactable sprite
                 playerSprite.openSpeechBubble(sprite.getExamineText());
+                if(sprite.getExamineAudio() != null) {
+                    sprite.getExamineAudio().play();
+                }
                 interactedWithSprite = true;
                 break;
             }
@@ -183,7 +193,7 @@ window.onload = () =>
         for(const id in obj.items)
         {
             const itm = obj.items[id];
-            items[id] = new Item(itm.name, itm.examine_text, itm.image);
+            items[id] = new Item(itm.name, itm.examine_text, new Audio(itm.examine_audio), itm.image);
         }
         for(const id in obj.combinations)
         {
@@ -234,8 +244,6 @@ window.onload = () =>
     }).catch(() => {
         console.log("error: game could not be loaded");
     });
-
-    openChatGUI();
 }
 
 // on window resize change the scale
@@ -259,7 +267,7 @@ function loadPlayerInventory(path: string) {
 }
 
 // chat gui
-function openChatGUI() {
+function openChatGUI(conversation: Conversation) {
     const html = `
     <div id="chatpanel">
         <img class="playerchathead" src="res/images/player_head.png"></img>
@@ -269,16 +277,22 @@ function openChatGUI() {
         <button class="chatoption">Back</button>
     </div>`;
 
-    let chatpanel = document.getElementById("chatpanel_parent");
-    if(chatpanel != null) {
-        // remove the chat panel if it already exists
-        chatpanel.parentNode.removeChild(chatpanel);
-    }
+    if(conversation != null) {
+        let chatpanel = document.getElementById("chatpanel");
+        if(chatpanel != null) {
+            // remove the chat panel if it already exists
+            chatpanel.parentNode.removeChild(chatpanel);
+        }
 
-    chatpanel = document.createElement("div");
-    chatpanel.innerHTML = html;
-    chatpanel.id = "chatpanel_parent";
-    document.body.insertBefore(chatpanel, document.getElementById("invent"));
+        chatpanel = document.createElement("div");
+        chatpanel.id = "chatpanel";
+        document.body.insertBefore(chatpanel, document.getElementById("invent"));
+
+        let d = conversation.getFirstDialog();
+        if(d != null) {
+
+        }
+    }
 }
 
 // gui control
@@ -418,5 +432,8 @@ function onItemClick(itembtn: HTMLButtonElement, item: Item, evt: MouseEvent)
         }
     } else if(evt.button === 2) {   // right click
         playerSprite.openSpeechBubble(item.getExamineText());
+        if(item.getExamineAudio() != null) {
+            item.getExamineAudio().play();
+        }
     }
 }

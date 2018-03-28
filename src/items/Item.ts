@@ -2,7 +2,7 @@ export class Item
 {
     protected combinations: Array<{other: Item, out: Array<Item>}>;
 
-    constructor(protected name: string, protected examineText: string, protected imgpath: string)
+    constructor(protected name: string, protected examineText: string, protected examineAudio: HTMLAudioElement, protected imgpath: string)
     {
         this.combinations = [];
     }
@@ -36,6 +36,11 @@ export class Item
     public getExamineText(): string
     {
         return this.examineText;
+    }
+
+    public getExamineAudio(): HTMLAudioElement
+    {
+        return this.examineAudio;
     }
 
     public getImagePath(): string
