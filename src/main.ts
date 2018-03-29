@@ -390,7 +390,7 @@ function addNewItemButton(itemslotIndex: number, item: Item)
     document.getElementById("invent").insertBefore(itembtn, itemslotbtns[itemslotIndex]);
 
     // add a mouse click callback to the new element
-    itembtn.onclick = (evt: MouseEvent) => {
+    itembtn.onmousedown = (evt: MouseEvent) => {
         onItemClick(itembtn, item, evt);
     }
 }

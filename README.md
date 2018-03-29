@@ -1,5 +1,8 @@
-# CLAD-The-Game
+# CLAD
 Sci-Fi point and click adventure game
+
+# Play the game
+https://clad.jsn.co/clad.html
 
 # Dev Setup
 * npm install -g typescript

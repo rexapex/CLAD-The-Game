@@ -16,7 +16,7 @@ import {PlayerSprite} from "./sprites/PlayerSprite"
 import {Item} from "./items/Item"
 import {Inventory} from "./items/Inventory"
 
-let inputManager = new InputManager();
+let inputManager;
 let img: HTMLImageElement;
 let sceneScale: number;
 let levelScale: number;
@@ -76,23 +76,20 @@ function gameLoop() // TODO - split draw into update and draw functions
     lastTime = currentTime;
 }
 
-inputManager.addMouseDownCallback((event: MouseEvent) => {
-    if(event.button === 0)  // left mouse button press
-    {
+function addInputCallbacks()
+{
+    inputManager.addPrimaryMouseDownCallback((event: MouseEvent) => {
         let x = (event.layerX - canvas.offsetLeft - fbWidth/2) / sceneScale;
         let y = (event.layerY - canvas.offsetTop - fbHeight/2) / sceneScale;
         console.log("mouse down at (" + x + ", " + y + ")");
-    }
-    else if(event.button === 2) // right mouse button press
-    {
-
-    }
-});
+    });
+}
 
 // program entry point
 window.onload = () =>
 {
     initCanvasAndContext();
+    inputManager = new InputManager(canvas);
 
     // set the canvas size
     canvas.width = window.innerWidth * 0.95;
