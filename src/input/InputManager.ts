@@ -51,10 +51,12 @@ export class InputManager
     }
 
     public touchstart = (e: TouchEvent) => {
+        e.preventDefault();
         this.touchTimer = setTimeout(() => { this.onlongtouch(e); }, this.touchDuration);
     }
 
     public touchend = (e: TouchEvent) => {
+        e.preventDefault();
         if(this.touchTimer != null) {
             clearTimeout(this.touchTimer);
             this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
@@ -63,6 +65,7 @@ export class InputManager
     }
 
     public touchmove = (e: TouchEvent) => {
+        e.preventDefault();
         if(this.touchTimer != null) {
             clearTimeout(this.touchTimer);
             this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
