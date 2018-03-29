@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes" />
 <meta charset="UTF-8">
 <style type="text/css">
     #canvas {
@@ -192,10 +194,17 @@
         background: rgba(128, 128, 128, 0.7);
     }
  </style>
-<head>
-    <title>CLAD in Steel</title>
+ <title>CLAD in Steel</title>
 </head>
 <body style="background-color:#000000; text-align:center;">
+    <script>
+        function BlockMove(event) {
+            // Tell Safari not to move the window.
+            event.preventDefault() ;
+        }
+        //  body ontouchmove="BlockMove(event);"
+    </script>
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <canvas id="canvas" width="1280" height="720"></canvas>
     <div id="menubar">
         <button class="menubtn" style="background-image: url(res/images/exitbtn.png);"></button>

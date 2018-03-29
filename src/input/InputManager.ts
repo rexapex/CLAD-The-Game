@@ -51,19 +51,22 @@ export class InputManager
     }
 
     public touchstart = (e: TouchEvent) => {
-        this.touchTimer = setTimeout(this.onlongtouch, this.touchDuration);
+        this.touchTimer = setTimeout(() => { this.onlongtouch(e); }, this.touchDuration);
     }
 
     public touchend = (e: TouchEvent) => {
-        if(this.touchTimer) {
+        if(this.touchTimer != null) {
             clearTimeout(this.touchTimer);
             this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
+            this.touchTimer = null;
         }
     }
 
     public touchmove = (e: TouchEvent) => {
-        if(this.touchTimer) {
+        if(this.touchTimer != null) {
             clearTimeout(this.touchTimer);
+            this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
+            this.touchTimer = null;
         }
     }
 
