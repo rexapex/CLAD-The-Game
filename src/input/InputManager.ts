@@ -2,8 +2,8 @@ export class InputManager
 {
     private primaryMouseDownCallbacks: Array<(x: number, y: number) => void> = Array<() => void>();
     private secondaryMouseDownCallbacks: Array<(x: number, y: number) => void> = Array<() => void>();
-    private touchTimer: number;
-    private touchDuration: number = 500;
+    private touchStartAt: number;
+    private longTouchDuration: number = 500;
 
     constructor(canvas: HTMLCanvasElement)
     {
@@ -16,6 +16,8 @@ export class InputManager
             document.addEventListener("touchend", this.touchend);
             document.addEventListener("touchmove", this.touchmove);
         // }
+
+        this.touchStartAt = 0;
     }
 
     private firePrimaryMouseDownEvent(x: number, y: number)
@@ -51,25 +53,23 @@ export class InputManager
     }
 
     public touchstart = (e: TouchEvent) => {
-        e.preventDefault();
-        this.touchTimer = setTimeout(() => { this.onlongtouch(e); }, this.touchDuration);
+        this.touchStartAt = Date.now();
     }
 
     public touchend = (e: TouchEvent) => {
-        e.preventDefault();
-        if(this.touchTimer != null) {
-            clearTimeout(this.touchTimer);
+        if(Date.now() - this.touchStartAt >= this.longTouchDuration) {
             this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
-            this.touchTimer = null;
+        } else {
+            this.fireSecondaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY);
         }
     }
 
     public touchmove = (e: TouchEvent) => {
         e.preventDefault();
-        if(this.touchTimer != null) {
-            clearTimeout(this.touchTimer);
+        if(Date.now() - this.touchStartAt >= this.longTouchDuration) {
             this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
-            this.touchTimer = null;
+        } else {
+            this.fireSecondaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY);
         }
     }
 
