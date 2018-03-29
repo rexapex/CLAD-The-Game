@@ -78,7 +78,14 @@
                         "Yeah": {
                             "type": "continue",
                             "text": "Yeah, I gave you that wrench",
-                            "speaker": "player"
+                            "speaker": "player",
+                            "next_dialog": {
+                                "type": "receive_item",
+                                "text": "Oh, have it back then",
+                                "speaker": "npc",
+                                "items_lost": [],
+                                "items_received": [ "0.0.1-002" ]
+                            }
                         }
                     }
                 }

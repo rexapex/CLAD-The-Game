@@ -70,7 +70,7 @@ export class Level
 
                             let npc = new NPCSprite(obj.x, obj.y, obj.scale, obj.origin_horizontal, obj.origin_vertical, animations, obj.examine_text, new Audio(obj.examine_audio),
                                                 new Circle(obj.x, obj.y, obj.interaction_radius), new Rectangle(obj.x-obj.click_zone_width/2, obj.y-obj.click_zone_height/2, obj.click_zone_width, obj.click_zone_height),
-                                                Level.buildConversation(obj));
+                                                Level.buildConversation(obj, items));
                             npc.setStartPos(obj.x, obj.y);
                             npc.setDepthScale(levelData.depth_scale_y);
                             npcSprites.push(npc);
@@ -116,34 +116,46 @@ export class Level
         });
     }
 
-    private static buildConversation(spriteObj: any): Conversation
+    private static buildConversation(spriteObj: any, items: any): Conversation
     {
         if(spriteObj.conversation != null) {
             if(spriteObj.conversation.first_dialog != null) {
-                return new Conversation(Level.buildDialog(spriteObj.conversation.first_dialog));
+                return new Conversation(Level.buildDialog(spriteObj.conversation.first_dialog, items));
             }
         }
 
         return null;
     }
 
-    private static buildDialog(dialog: any): Dialog
+    private static buildDialog(dialog: any, items: any): Dialog
     {
         if(dialog.type == "continue") {
             let nextDialog: Dialog;
             if(dialog.next_dialog != null) {
-                nextDialog = Level.buildDialog(dialog.next_dialog);
+                nextDialog = Level.buildDialog(dialog.next_dialog, items);
             }
             return new ContinueDialog(dialog.text, dialog.speaker, nextDialog);
         } else if(dialog.type == "option") {
             let options = {};
-
             // create a dialog object for each option
             for(let optName in dialog.options) {
-                options[optName] = Level.buildDialog(dialog.options[optName]);
+                options[optName] = Level.buildDialog(dialog.options[optName], items);
             }
-
             return new OptionDialog(dialog.text, dialog.speaker, options);
+        } else if(dialog.type == "receive_item") {
+            let nextDialog: Dialog;
+            if(dialog.next_dialog != null) {
+                nextDialog = Level.buildDialog(dialog.next_dialog, items);
+            }
+            let itemsLost = [];
+            for(const id of dialog.items_lost) {
+                itemsLost.push(items[id]);
+            }
+            let itemsReceived = [];
+            for(const id of dialog.items_received) {
+                itemsReceived.push(items[id]);
+            }
+            return new ReceiveItemDialog(dialog.text, dialog.speaker, nextDialog, itemsLost, itemsReceived);
         }
 
         return null;

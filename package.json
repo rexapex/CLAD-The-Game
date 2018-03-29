@@ -4,6 +4,7 @@
   "description": "Point and click adventure game revolving around CLAD",
   "main": "src/main.ts",
   "dependencies": {
+    "core-js": "^2.5.4",
     "ts-loader": "^4.0.1"
   },
   "devDependencies": {

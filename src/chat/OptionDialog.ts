@@ -2,14 +2,14 @@ import {Dialog} from "./Dialog"
 
 export class OptionDialog extends Dialog
 {
-    constructor(text: string, speaker: string, protected options: {text: string, dialog: Dialog})
+    constructor(text: string, speaker: string, protected options: {[text: string]: Dialog})
     {
         super(text, speaker);
     }
 
     public createGUIElement(div: HTMLDivElement): Promise<Dialog>
     {
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<Dialog>((resolve, reject) => {
             // add the dialog text
             let txt = document.createElement("label");
             txt.classList.add("chatmsg");

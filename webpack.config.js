@@ -6,7 +6,7 @@ var config = {
 var gameConfig = Object.assign({}, config, {
     mode: "development",
     devtool: "inline-source-map",
-    entry: "./src/main.ts",
+    entry: ["core-js/fn/promise", "./src/main.ts"],
     output: {
         filename: "build/clad.js"
     },
@@ -25,7 +25,7 @@ var gameConfig = Object.assign({}, config, {
 var editorConfig = Object.assign({}, config, {
     mode: "development",
     devtool: "inline-source-map",
-    entry: "./src/editor.ts",
+    entry: ["core-js/fn/promise", "./src/editor.ts"],
     output: {
         filename: "build/editor.js"
     },

@@ -1,3 +1,5 @@
+require("core-js")
+
 import {canvas, ctx, initCanvasAndContext} from "./glob"
 import {NavMesh} from "./collision/NavMesh"
 import {Triangle} from "./collision/Triangle"
@@ -284,7 +286,7 @@ function loadPlayerInventory(path: string) {
     // TODO - load from file
     //invent.addItem(items["0.0.1-001"]);
     //invent.addItem(items["0.0.1-002"]);
-    invent.addItem(items["0.0.1-002"]);
+    //invent.addItem(items["0.0.1-002"]);
     //invent.addItem(items["0.0.1-003"]);
 }
 
@@ -304,22 +306,24 @@ function openChatGUI(conversation: Conversation) {
         // create a GUI for the dialog
         let d = conversation.getFirstDialog();
         createDialogGUI(chatpanel as HTMLDivElement, d);
-
-        // add a button for exiting the conversation
-        let exitbtn = document.createElement("button");
-        exitbtn.classList.add("chatbtn");
-        exitbtn.innerHTML = "Exit Conversation";
-        chatpanel.appendChild(exitbtn);
-        exitbtn.onclick = () => {
-            // exit the conversation
-            chatpanel.parentNode.removeChild(chatpanel);
-        };
     }
 }
 
 function createDialogGUI(chatpanel: HTMLDivElement, d: Dialog) {
+    chatpanel.innerHTML = "";   // clear the div of previous contents
+
+    // add a button for exiting the conversation
+    // NOTE - probably not needed
+    /*let exitbtn = document.createElement("button");
+    exitbtn.classList.add("exitchatbtn");
+    exitbtn.innerHTML = "Exit Conversation";
+    chatpanel.appendChild(exitbtn);
+    exitbtn.onclick = () => {
+        // exit the conversation
+        chatpanel.parentNode.removeChild(chatpanel);
+    };*/
+
     if(d != null) {
-        chatpanel.innerHTML = "";   // clear the div of previous contents
         // add the speaker image based on whether player or npc is speaking
         let speakerimg = document.createElement("img");
         speakerimg.src = "res/images/player_head.png";

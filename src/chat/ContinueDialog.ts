@@ -9,7 +9,7 @@ export class ContinueDialog extends Dialog
 
     public createGUIElement(div: HTMLDivElement): Promise<Dialog>
     {
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<Dialog>((resolve, reject) => {
             // add the dialog text
             let txt = document.createElement("label");
             txt.classList.add("chatmsg");
