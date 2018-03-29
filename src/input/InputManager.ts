@@ -14,6 +14,7 @@ export class InputManager
             document.addEventListener("mousedown", this.mousedown);
             document.addEventListener("touchstart", this.touchstart);
             document.addEventListener("touchend", this.touchend);
+            document.addEventListener("touchcancel", this.touchend);
             document.addEventListener("touchmove", this.touchmove);
         // }
 
@@ -57,7 +58,7 @@ export class InputManager
     }
 
     public touchend = (e: TouchEvent) => {
-        if(Date.now() - this.touchStartAt >= this.longTouchDuration) {
+        if(Date.now() - this.touchStartAt < this.longTouchDuration) {
             this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
         } else {
             this.fireSecondaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY);
