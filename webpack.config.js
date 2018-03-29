@@ -42,5 +42,5 @@ var editorConfig = Object.assign({}, config, {
 });
 
 module.exports = [
-    gameConfig, editorConfig
+    gameConfig
 ];

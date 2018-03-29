@@ -1,5 +1,3 @@
-require("core-js")
-
 import {canvas, ctx, initCanvasAndContext} from "./glob"
 import {NavMesh} from "./collision/NavMesh"
 import {Triangle} from "./collision/Triangle"
@@ -23,7 +21,7 @@ import {Dialog} from "./chat/Dialog"
 import {ContinueDialog} from "./chat/ContinueDialog"
 import {OptionDialog} from "./chat/OptionDialog"
 
-let inputManager = new InputManager();
+let inputManager;
 let img: HTMLImageElement;
 let sceneScale: number;
 let levelScale: number;
@@ -90,17 +88,16 @@ function gameLoop() // TODO - split draw into update and draw functions
     lastTime = currentTime;
 }
 
-inputManager.addMouseDownCallback((event: MouseEvent) => {
-    let x = (event.layerX - canvas.offsetLeft - fbWidth/2) / sceneScale;
-    let y = (event.layerY - canvas.offsetTop - fbHeight/2) / sceneScale;
-    console.log("mouse down at (" + x + ", " + y + ")");
+function addInputCallbacks() {
+    inputManager.addPrimaryMouseDownCallback((mousex: number, mousey: number) => {
+        let x = (mousex - canvas.offsetLeft - fbWidth/2) / sceneScale;
+        let y = (mousey - canvas.offsetTop - fbHeight/2) / sceneScale;
+        console.log("left mouse down at (" + x + ", " + y + ")");
+        let interactedWithSprite: boolean = false;
 
-    let interactedWithSprite: boolean = false;
-
-    // check for clicks on interactable (static) sprites
-    for(const sprite of interactableSprites)
-    {
-        if(event.button === 0) {  // left mouse button press
+        // check for clicks on interactable (static) sprites
+        for(const sprite of interactableSprites)
+        {
             if(sprite.inInteractionZone(playerSprite.x, playerSprite.y) && sprite.inClickZone(x, y)) {
                 // interact with the sprite
                 const obj = sprite.interact(selectedItem);
@@ -119,48 +116,55 @@ inputManager.addMouseDownCallback((event: MouseEvent) => {
                 interactedWithSprite = true;
                 break;
             }
-        } else if(event.button === 2) { // right mouse button press
+        }
+
+        // check for clicks on NPC sprites
+        for(const sprite of npcSprites)
+        {
+            if(sprite.inInteractionZone(playerSprite.x, playerSprite.y) && sprite.inClickZone(x, y)) {
+                openChatGUI(sprite.getConversation());
+                interactedWithSprite = true;
+            }
+        }
+
+        if(!interactedWithSprite) {
+            let waypoints = navmesh.getWaypoints(playerSprite.x, playerSprite.y, x, y);
+            playerSprite.setWaypoints(waypoints);
+        }
+    });
+
+    inputManager.addSecondaryMouseDownCallback((mousex: number, mousey: number) => {
+        let x = (mousex - canvas.offsetLeft - fbWidth/2) / sceneScale;
+        let y = (mousey - canvas.offsetTop - fbHeight/2) / sceneScale;
+        console.log("right mouse down at (" + x + ", " + y + ")");
+
+        // check for clicks on interactable (static) sprites
+        for(const sprite of interactableSprites)
+        {
             if(sprite.inClickZone(x, y)) {
                 // examine the interactable sprite
                 playerSprite.openSpeechBubble(sprite.getExamineText());
                 if(sprite.getExamineAudio() != null) {
                     sprite.getExamineAudio().play();
                 }
-                interactedWithSprite = true;
                 break;
             }
         }
-    }
 
-    // check for clicks on NPC sprites
-    for(const sprite of npcSprites)
-    {
-        if(event.button === 0) {    // left mouse button press
-            if(sprite.inInteractionZone(playerSprite.x, playerSprite.y) && sprite.inClickZone(x, y)) {
-                openChatGUI(sprite.getConversation());
-                interactedWithSprite = true;
-            }
-        } else if(event.button === 2) { // right mouse button press
+        // check for clicks on NPC sprites
+        for(const sprite of npcSprites)
+        {
             if(sprite.inClickZone(x, y)) {
                 // examine the NPC sprite
                 playerSprite.openSpeechBubble(sprite.getExamineText());
                 if(sprite.getExamineAudio() != null) {
                     sprite.getExamineAudio().play();
                 }
-                interactedWithSprite = true;
                 break;
             }
         }
-    }
-
-    if(!interactedWithSprite) {
-        if(event.button === 0)  // left mouse button press
-        {
-            let waypoints = navmesh.getWaypoints(playerSprite.x, playerSprite.y, x, y);
-            playerSprite.setWaypoints(waypoints);
-        }
-    }
-});
+    });
+}
 
 function loadPlayerSprite(): Promise<AnimatedSprite>
 {
@@ -195,6 +199,8 @@ function loadPlayerSprite(): Promise<AnimatedSprite>
 window.onload = () =>
 {
     initCanvasAndContext();
+    inputManager = new InputManager(canvas);
+    addInputCallbacks();
 
     // set the canvas size
     canvas.width = window.innerWidth * 0.95;
