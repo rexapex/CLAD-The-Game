@@ -1,13 +1,14 @@
 import {Dialog} from "./Dialog"
+import {Inventory} from "../items/Inventory"
 
 export class OptionDialog extends Dialog
 {
-    constructor(text: string, speaker: string, protected options: {[text: string]: Dialog})
+    constructor(text: string, speaker: string, audio: HTMLAudioElement, protected options: {[text: string]: Dialog})
     {
-        super(text, speaker);
+        super(text, speaker, audio);
     }
 
-    public createGUIElement(div: HTMLDivElement): Promise<Dialog>
+    public createGUIElement(div: HTMLDivElement, invent: Inventory): Promise<Dialog>
     {
         return new Promise<Dialog>((resolve, reject) => {
             // add the dialog text

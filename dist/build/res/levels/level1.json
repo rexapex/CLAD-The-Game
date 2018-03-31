@@ -73,18 +73,31 @@
                         "Nope": {
                             "type": "continue",
                             "text": "No, we haven't met",
-                            "speaker": "player"
+                            "audio": "res/audio/eng/clad_voice_lines/No we haven't met.m4a",
+                            "speaker": "player",
+                            "next_dialog": {
+                                "type": "continue",
+                                "text": "Nice to meet you, now get out of my house!",
+                                "speaker": "npc"
+                            }
                         },
                         "Yeah": {
                             "type": "continue",
-                            "text": "Yeah, I gave you that wrench",
+                            "text": "Yeah, I lent you that wrench",
+                            "audio": "res/audio/eng/clad_voice_lines/Yeah I lent you my wrench.m4a",
                             "speaker": "player",
                             "next_dialog": {
                                 "type": "receive_item",
                                 "text": "Oh, have it back then",
+                                "fail_text": null,
                                 "speaker": "npc",
                                 "items_lost": [],
-                                "items_received": [ "0.0.1-002" ]
+                                "items_received": [ "0.0.1-002" ],
+                                "replacement_dialog": {
+                                    "type": "continue",
+                                    "text": "I may have lost a wrench, but the tangy taste never fades",
+                                    "speaker": "npc"
+                                }
                             }
                         }
                     }
