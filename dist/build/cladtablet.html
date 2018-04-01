@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+//<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta charset="UTF-8">
+<script>
+    function BlockMove(event) {
+        // Tell Safari not to move the window.
+        event.preventDefault() ;
+    }
+</script>
+<link rel="apple-touch-icon" href="./res/images/player_head.png" />
+<style type="text/css">
+    html {
+      touch-action: manipulation;
+    }
+    #canvas {
+      z-index: 0;
+      position: relative;
+    }
+
+    #menubar {
+        z-index: 2;
+        background:rgba(0.1, 0.1, 0.1, 0.3);
+        position: fixed;
+        width: 100%;
+
+        top: -moz-calc(-9vh + 5px); /* Firefox */
+        top: -webkit-calc(-9vh + 5px); /* WebKit */
+        top: -o-calc(-9vh + 5px); /* Opera */
+        top: calc(-9vh + 5px); /* Standard */
+
+        -webkit-transition: top 0.5s; /* For Safari 3.1 to 6.0 */
+        transition: top 0.5s;
+    }
+
+    #menubar:hover {
+        top: 0;
+    }
+
+    .menubtn {
+        z-index: 1;
+        width: 10vh;
+        height: 10vh;
+        opacity: 0.9;
+        border: none !important;
+        background: transparent;
+        background-size: 10vh 10vh;
+    }
+
+    #invent {
+      z-index: 1;
+      background:rgba(0.1, 0.1, 0.1, 0.3);
+      position: fixed;
+      width: 100%;
+
+      bottom: -moz-calc(-9vh + 5px); /* Firefox */
+      bottom: -webkit-calc(-9vh + 5px); /* WebKit */
+      bottom: -o-calc(-9vh + 5px); /* Opera */
+      bottom: calc(-9vh + 5px); /* Standard */
+
+      -webkit-transition: bottom 0.5s; /* For Safari 3.1 to 6.0 */
+      transition: bottom 0.5s;
+    }
+
+    #invent:hover {
+        bottom: 0;
+    }
+
+    @keyframes cogspin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .itemslot {
+        z-index: 0.5;
+        width: 10vh;
+        height: 10vh;
+        opacity: 0.9;
+        border: none !important;
+        background: transparent;
+        background-size: 10vh 10vh;
+    }
+
+    .itemslot:hover {
+        animation-name: cogspin;
+        animation-duration: 1s;
+    }
+
+    .item {
+        z-index: 2;
+        width: 10vh;
+        height: 10vh;
+        border: none !important;
+        background: transparent;
+        background-size: 10vh 10vh;
+        position: absolute;
+    }
+
+    .selecteditem {
+        /* https://stackoverflow.com/questions/12690444/css-border-on-png-image-with-transparent-parts */
+        /* green: #1AFF80, amber: #FFB642, blue: #2ECFFF */
+        -webkit-filter: drop-shadow(2px 1px 0 black) drop-shadow(-1px -1px 0 black);
+        filter: drop-shadow(2px 1px 0 black) drop-shadow(-1px -1px 0 black);
+    }
+
+    #chatpanel {
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.65);
+      width: 100%;
+      height: 30%;
+
+      /* align the chat panel in the center of the screen */
+      text-align: center;
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .playerchathead {
+        float: right;
+        margin-right: 10%;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .npcchathead {
+        float: left;
+        margin-left: 10%;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .chatmsg {
+        /* green: #1AFF80, amber: #FFB642, blue: #2ECFFF */
+        color: #1AFF80;
+        font-size: 5vh;
+        border: none !important;
+        background: rgba(32, 32, 32, 1);
+
+        /* center vertically and horizontally */
+        display: block;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .chatbtn {
+        /* green: #1AFF80, amber: #FFB642, blue: #2ECFFF */
+        color: #1AFF80;
+        font-size: 3vh;
+        border: none !important;
+        background: transparent;
+        padding: 1vh 1vh;
+        width: 30%;
+
+        /* center vertically and horizontally */
+        display: block;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .chatbtn:hover {
+        background: rgba(128, 128, 128, 0.7);
+    }
+
+    .chatimg {
+        width: 5vh;
+        height: 5vh;
+
+        /* center vertically and horizontally */
+        display: inline;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .chatimgheader {
+        /* green: #1AFF80, amber: #FFB642, blue: #2ECFFF */
+        color: #1AFF80;
+        font-size: 2vh;
+
+        /* center vertically and horizontally */
+        display: block;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .exitchatbtn {
+        /* green: #1AFF80, amber: #FFB642, blue: #2ECFFF */
+        color: #FFB642;
+        font-size: 3vh;
+        border: none !important;
+        background: transparent;
+        padding: 1vh 1vh;
+        display: inline;
+        /*width: 30%;*/
+
+        /* center vertically and horizontally */
+        /*display: block;
+        text-align: center;
+        margin: 0 auto;*/
+    }
+
+    .exitchatbtn:hover {
+        background: rgba(128, 128, 128, 0.7);
+    }
+ </style>
+<title>CLAD in Steel</title>
+</head>
+<body ontouchmove="BlockMove(event);" style="background-color:#000000; text-align:center;">
+    <canvas id="canvas" width="1280" height="720"></canvas>
+    <div id="menubar">
+        <button class="menubtn" style="background-image: url(res/images/exitbtn.png);"></button>
+        <button class="menubtn" style="background-image: url(res/images/savebtn.png);"></button>
+    </div>
+    <div id="invent">
+        <button id="itemslot1" class="itemslot" style="background-image: url(res/images/player_head.png);"></button>
+        <button id="itemslot2" class="itemslot" style="background-image: url(res/images/itemslot.png);"></button>
+        <button id="itemslot4" class="itemslot" style="background-image: url(res/images/itemslot.png);"></button>
+        <button id="itemslot3" class="itemslot" style="background-image: url(res/images/itemslot.png);"></button>
+        <button id="itemslot5" class="itemslot" style="background-image: url(res/images/itemslot.png);"></button>
+        <button id="itemslot6" class="itemslot" style="background-image: url(res/images/itemslot.png);"></button>
+        <button id="itemslot7" class="itemslot" style="background-image: url(res/images/itemslot.png);"></button>
+        <button id="itemslot8" class="itemslot" style="background-image: url(res/images/itemslot.png);"></button>
+        <button id="itemslot9" class="itemslot" style="background-image: url(res/images/itemslot.png);"></button>
+    </div>
+    <script src="runclad.js"></script>
+</body>
+</html>
