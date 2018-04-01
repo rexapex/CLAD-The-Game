@@ -60,7 +60,7 @@ export class InputManager
     }
 
     public touchend = (e: TouchEvent) => {
-        e.preventDefault();
+        //e.preventDefault();
         if(Date.now() - this.touchStartAt < this.longTouchDuration) {
 //alert("short touch " + JSON.stringify(e));
         this.firePrimaryMouseDownEvent(e.changedTouches[0].clientX, e.changedTouches[0].clientY); // fire primary mouse click event
