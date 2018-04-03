@@ -40,12 +40,12 @@ export class InteractableSprite extends StaticSprite
     {
         for(const inter of this.interactions)
         {
-            // if the items match, then interact with the object
-            if(inter.getItem() == item) {
+            // if the items match and the interaction hasn't been done before, then interact with the object
+            if(!inter.getUsed() && inter.getItem() == item) {
                 let obj = inter.interact(item);
                 if(obj != null) {
                     // remove the interaction if it has been fulfilled
-                    this.interactions.splice(this.interactions.indexOf(inter), 1);
+                    inter.setUsed();
                 }
                 return obj;
             }

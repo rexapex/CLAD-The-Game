@@ -29,6 +29,13 @@ export abstract class Sprite
         }
     }
 
-
     public abstract draw(currentTime: number, deltaTime: number): void;
+
+    public getX() {
+        return this.x;
+    }
+
+    public getY() {
+        return this.y;
+    }
 }

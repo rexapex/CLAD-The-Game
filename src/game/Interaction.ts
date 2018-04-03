@@ -2,6 +2,8 @@ import {Item} from "../items/Item"
 
 export abstract class Interaction
 {
+    private used = false;
+
     // item can be null
     constructor(protected item: Item) {}
 
@@ -11,5 +13,15 @@ export abstract class Interaction
     public getItem(): Item
     {
         return this.item;
+    }
+
+    public setUsed(): void
+    {
+        this.used = true;
+    }
+
+    public getUsed(): boolean
+    {
+        return this.used;
     }
 }

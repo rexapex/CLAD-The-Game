@@ -42,9 +42,11 @@ let selectedItemBtn;
 // true iff the player is talking to an NPC
 let inConversation: boolean = false;
 
+// map from level name to and object giving details about what has changed
+let levelSaveInfo = {};
+
 let fbWidth;
 let fbHeight;
-
 let lastTime;
 
 function gameLoop() // TODO - split draw into update and draw functions
@@ -248,7 +250,7 @@ window.onload = () =>
                 item2.addCombination(item1, itemsOut);
             }
         }
-        loadPlayerInventory("ack");
+        loadLocalGameSave();
         initGUIControllers();
     }).catch(() => {
         console.log("error: items could not be loaded");
@@ -292,15 +294,6 @@ window.onresize = () => {
     fbHeight = canvas.height;
     sceneScale = levelScale * canvas.height/880;  // scale based on the canvas size so game fits on screen
     console.log(sceneScale);
-}
-
-// load the player's inventory
-function loadPlayerInventory(path: string) {
-    // TODO - load from file
-    //invent.addItem(items["0.0.1-001"]);
-    //invent.addItem(items["0.0.1-002"]);
-    //invent.addItem(items["0.0.1-002"]);
-    //invent.addItem(items["0.0.1-003"]);
 }
 
 // chat gui
@@ -502,5 +495,88 @@ function onItemClick(itembtn: HTMLButtonElement, item: Item, evt: MouseEvent)
         if(item.getExamineAudio() != null) {
             item.getExamineAudio().play();
         }
+    }
+}
+
+document.getElementById("savebtn").onclick = () => {
+    saveGameLocally();
+};
+
+document.getElementById("exitbtn").onclick = () => {
+    resetLocalGameSave();
+};
+
+function loadLocalGameSave()
+{
+    if(typeof(Storage) !== "undefined") {
+        const save1 = JSON.parse(localStorage.save1);
+        console.log(save1);
+
+        // load the player's items
+        for(const itemid of save1.invent)
+        {
+            console.log(itemid);
+            invent.addItem(items[itemid]);
+        }
+    } else {
+        console.log("error: no local storage to load");
+    }
+}
+
+// save the game locally
+function saveGameLocally()
+{
+    if(typeof(Storage) !== "undefined") {
+        console.log("saving game locally");
+        let save1 = { invent: null, levelData: null };
+
+        // create an array of item IDs representing the player's inventory
+        let itemIDs = new Array<string>(9);
+        for(const inventIndex in invent.getItems()) {
+            for(const itemID in items) {
+                console.log(itemID, inventIndex)
+                if(items[itemID] === invent.getItems()[inventIndex]) {
+                    itemIDs[inventIndex] = itemID;
+                }
+            }
+        }
+        // save the array of item IDs to local storage
+        save1.invent = itemIDs;
+
+        // TODO - save the position of the sprites and the level name
+        let levelData = { player_x: null, player_y: null, npcSprites: null };
+        // store the player's position
+        levelData.player_x = playerSprite.getX();
+        levelData.player_y = playerSprite.getY();
+        // store the positions of other nav sprites
+        levelData.npcSprites = [];
+        for(const sprite of npcSprites)
+        {
+            levelData.npcSprites.push({ x: sprite.getX(), y: sprite.getY() });
+        }
+        // save the level data to local storage
+        save1.levelData = levelData;
+
+        // NOTE - must do this for all levels explored in this playthrough
+        // TODO - make a note of any interactable sprites which have had their interactions used up
+        // TODO - make a note of any receive item dialogs which have been used up
+
+        localStorage.save1 = JSON.stringify(save1);
+
+
+    } else {
+        console.log("error: no local storage support");
+        alert("error: no local storage support");
+    }
+}
+
+function resetLocalGameSave()
+{
+    if(typeof(Storage) !== "undefined") {
+        console.log("resetting local game save");
+        localStorage.removeItem("save1");
+    } else {
+        console.log("error: no local storage to reset");
+        alert("error: no local storage to reset");
     }
 }
