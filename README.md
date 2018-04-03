@@ -4,7 +4,8 @@ Sci-Fi point and click adventure game
 # Play the game
 https://clad.jsn.co/clad.html
 
-# Dev Setup
+# Dev Setup - Use other command prompt not powershell
+* npm init
 * npm install -g typescript
 * npm install
 * npm install -g webpack
