@@ -95,77 +95,81 @@ function gameLoop() // TODO - split draw into update and draw functions
 
 function addInputCallbacks() {
     inputManager.addPrimaryMouseDownCallback((mousex: number, mousey: number) => {
-        let x = (mousex - canvas.offsetLeft - fbWidth/2) / sceneScale;
-        let y = (mousey - canvas.offsetTop - fbHeight/2) / sceneScale;
-        console.log("left mouse down at (" + x + ", " + y + ")");
-        let interactedWithSprite: boolean = false;
+        if(!inConversation) {
+            let x = (mousex - canvas.offsetLeft - fbWidth/2) / sceneScale;
+            let y = (mousey - canvas.offsetTop - fbHeight/2) / sceneScale;
+            console.log("left mouse down at (" + x + ", " + y + ")");
+            let interactedWithSprite: boolean = false;
 
-        // check for clicks on interactable (static) sprites
-        for(const sprite of interactableSprites)
-        {
-            if(sprite.inInteractionZone(playerSprite.x, playerSprite.y) && sprite.inClickZone(x, y)) {
-                // interact with the sprite
-                const obj = sprite.interact(selectedItem);
-                if(obj != null) {
-                    playerSprite.openSpeechBubble(obj.text);
-                    for(const itm of obj.items) {
-                        invent.addItem(itm);
-                        refreshAllItemsDisplayed();
+            // check for clicks on interactable (static) sprites
+            for(const sprite of interactableSprites)
+            {
+                if(sprite.inInteractionZone(playerSprite.x, playerSprite.y) && sprite.inClickZone(x, y)) {
+                    // interact with the sprite
+                    const obj = sprite.interact(selectedItem);
+                    if(obj != null) {
+                        playerSprite.openSpeechBubble(obj.text);
+                        for(const itm of obj.items) {
+                            invent.addItem(itm);
+                            refreshAllItemsDisplayed();
+                        }
+                        if(obj.audio != null) {
+                            obj.audio.play();
+                        }
+                    } else {
+                        playerSprite.openSpeechBubble("That's a rubbish idea!");
                     }
-                    if(obj.audio != null) {
-                        obj.audio.play();
-                    }
-                } else {
-                    playerSprite.openSpeechBubble("That's a rubbish idea!");
+                    interactedWithSprite = true;
+                    break;
                 }
-                interactedWithSprite = true;
-                break;
             }
-        }
 
-        // check for clicks on NPC sprites
-        for(const sprite of npcSprites)
-        {
-            if(sprite.inInteractionZone(playerSprite.x, playerSprite.y) && sprite.inClickZone(x, y)) {
-                openChatGUI(sprite.getConversation());
-                interactedWithSprite = true;
+            // check for clicks on NPC sprites
+            for(const sprite of npcSprites)
+            {
+                if(sprite.inInteractionZone(playerSprite.x, playerSprite.y) && sprite.inClickZone(x, y)) {
+                    openChatGUI(sprite.getConversation());
+                    interactedWithSprite = true;
+                }
             }
-        }
 
-        if(!interactedWithSprite) {
-            let waypoints = navmesh.getWaypoints(playerSprite.x, playerSprite.y, x, y);
-            playerSprite.setWaypoints(waypoints);
+            if(!interactedWithSprite) {
+                let waypoints = navmesh.getWaypoints(playerSprite.x, playerSprite.y, x, y);
+                playerSprite.setWaypoints(waypoints);
+            }
         }
     });
 
     inputManager.addSecondaryMouseDownCallback((mousex: number, mousey: number) => {
-        let x = (mousex - canvas.offsetLeft - fbWidth/2) / sceneScale;
-        let y = (mousey - canvas.offsetTop - fbHeight/2) / sceneScale;
-        console.log("right mouse down at (" + x + ", " + y + ")");
+        if(!inConversation) {
+            let x = (mousex - canvas.offsetLeft - fbWidth/2) / sceneScale;
+            let y = (mousey - canvas.offsetTop - fbHeight/2) / sceneScale;
+            console.log("right mouse down at (" + x + ", " + y + ")");
 
-        // check for clicks on interactable (static) sprites
-        for(const sprite of interactableSprites)
-        {
-            if(sprite.inClickZone(x, y)) {
-                // examine the interactable sprite
-                playerSprite.openSpeechBubble(sprite.getExamineText());
-                if(sprite.getExamineAudio() != null) {
-                    sprite.getExamineAudio().play();
+            // check for clicks on interactable (static) sprites
+            for(const sprite of interactableSprites)
+            {
+                if(sprite.inClickZone(x, y)) {
+                    // examine the interactable sprite
+                    playerSprite.openSpeechBubble(sprite.getExamineText());
+                    if(sprite.getExamineAudio() != null) {
+                        sprite.getExamineAudio().play();
+                    }
+                    break;
                 }
-                break;
             }
-        }
 
-        // check for clicks on NPC sprites
-        for(const sprite of npcSprites)
-        {
-            if(sprite.inClickZone(x, y)) {
-                // examine the NPC sprite
-                playerSprite.openSpeechBubble(sprite.getExamineText());
-                if(sprite.getExamineAudio() != null) {
-                    sprite.getExamineAudio().play();
+            // check for clicks on NPC sprites
+            for(const sprite of npcSprites)
+            {
+                if(sprite.inClickZone(x, y)) {
+                    // examine the NPC sprite
+                    playerSprite.openSpeechBubble(sprite.getExamineText());
+                    if(sprite.getExamineAudio() != null) {
+                        sprite.getExamineAudio().play();
+                    }
+                    break;
                 }
-                break;
             }
         }
     });
@@ -314,18 +318,9 @@ function openChatGUI(conversation: Conversation) {
 function createDialogGUI(chatpanel: HTMLDivElement, d: Dialog) {
     chatpanel.innerHTML = "";   // clear the div of previous contents
 
-    // add a button for exiting the conversation
-    // NOTE - probably not needed
-    /*let exitbtn = document.createElement("button");
-    exitbtn.classList.add("exitchatbtn");
-    exitbtn.innerHTML = "Exit Conversation";
-    chatpanel.appendChild(exitbtn);
-    exitbtn.onclick = () => {
-        // exit the conversation
-        chatpanel.parentNode.removeChild(chatpanel);
-    };*/
-
     if(d != null) {
+        inConversation = true;
+
         // add the speaker image based on whether player or npc is speaking
         let speakerimg = document.createElement("img");
         speakerimg.src = "res/images/player_head.png";
@@ -333,15 +328,30 @@ function createDialogGUI(chatpanel: HTMLDivElement, d: Dialog) {
         chatpanel.appendChild(speakerimg);
 
         // add labels and buttons for this dialog
-        d.createGUIElement(chatpanel).then((nextDialog: Dialog) => {
+        d.createGUIElement(chatpanel, invent).then((nextDialog: Dialog) => {
             if(nextDialog != null) {
+                // stop the dialog audio
+                if(d.getAudio() != null) {
+                    d.getAudio().pause();
+                    d.getAudio().currentTime = 0;
+                }
+
                 // advance to next dialog
                 createDialogGUI(chatpanel, nextDialog);
             } else {
                 // next dialog is null, therefore, exit conversation
                 chatpanel.parentNode.removeChild(chatpanel);
+                inConversation = false;
             }
         });
+
+        // refresh inventory GUI
+        refreshAllItemsDisplayed();
+
+        // play the dialog audio
+        if(d.getAudio() != null) {
+            d.getAudio().play();
+        }
     }
 }
 
@@ -431,7 +441,7 @@ function onItemSlotClick(itemslotbtn: HTMLButtonElement, itemslotIndex: number, 
         selectedItemBtn.classList.remove("selecteditem");
         refreshItemDisplayed(selectedItemBtn, null);
         addNewItemButton(itemslotIndex, selectedItem);
-        invent.moveItem(selectedItem, itemslotIndex);
+        console.log(invent.moveItem(selectedItem, itemslotIndex));
         console.log(invent.getItems());
         selectedItem = null;
         selectedItemBtn = null;

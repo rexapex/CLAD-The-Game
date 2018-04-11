@@ -134,14 +134,14 @@ export class Level
             if(dialog.next_dialog != null) {
                 nextDialog = Level.buildDialog(dialog.next_dialog, items);
             }
-            return new ContinueDialog(dialog.text, dialog.speaker, nextDialog);
+            return new ContinueDialog(dialog.text, dialog.speaker, new Audio(dialog.audio), nextDialog);
         } else if(dialog.type == "option") {
             let options = {};
             // create a dialog object for each option
             for(let optName in dialog.options) {
                 options[optName] = Level.buildDialog(dialog.options[optName], items);
             }
-            return new OptionDialog(dialog.text, dialog.speaker, options);
+            return new OptionDialog(dialog.text, dialog.speaker, new Audio(dialog.audio), options);
         } else if(dialog.type == "receive_item") {
             let nextDialog: Dialog;
             if(dialog.next_dialog != null) {
@@ -155,11 +155,12 @@ export class Level
             for(const id of dialog.items_received) {
                 itemsReceived.push(items[id]);
             }
-            return new ReceiveItemDialog(dialog.text, dialog.speaker, nextDialog, itemsLost, itemsReceived);
+            return new ReceiveItemDialog(dialog.text, dialog.speaker, new Audio(dialog.audio), nextDialog, itemsLost, itemsReceived, dialog.replacement_dialog ? this.buildDialog(dialog.replacement_dialog, items) : null);
         }
 
         return null;
     }
 
-    private constructor() {}
+    private constructor(public textureAtlas, public sceneScale, public playerStartX, public playerStartY, public playerStarts,
+                        public depthScaleY, public navmesh, public staticSprites, public interactableSprites, public npcSprites) {}
 }

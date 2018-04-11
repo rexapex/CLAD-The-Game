@@ -1,11 +1,11 @@
 {
-  "name": "CLAD_The_Game",
+  "name": "CLAD",
   "version": "1.0.0",
-  "description": "Point and click adventure game revolving around CLAD",
+  "description": "The Adventures of Quacker Quagmire and Charlie Duck",
   "main": "src/main.ts",
   "dependencies": {
-    "core-js": "^2.5.4",
-    "ts-loader": "^4.0.1"
+    "ts-loader": "^4.0.1",
+    "webpack": "^4.0.1"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.0"
@@ -13,6 +13,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "James Sugden",
-  "license": "None"
+  "author": "",
+  "license": "ISC"
 }

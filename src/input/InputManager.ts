@@ -15,7 +15,7 @@ export class InputManager
             document.addEventListener("touchstart", this.touchstart);
             document.addEventListener("touchend", this.touchend);
             document.addEventListener("touchcancel", this.touchend);
-            //document.addEventListener("touchmove", this.touchmove);
+            document.addEventListener("touchmove", this.touchmove);
         // }
 
         this.touchStartAt = 0;
@@ -42,9 +42,9 @@ export class InputManager
 
         // notify all callbacks
         if(e.button === 0) {
-            this.firePrimaryMouseDownEvent(e.layerX, e.layerY);
+            this.firePrimaryMouseDownEvent(e.clientX, e.clientY);
         } else if(e.button === 2) {
-            this.fireSecondaryMouseDownEvent(e.layerX, e.layerY);
+            this.fireSecondaryMouseDownEvent(e.clientX, e.clientY);
         }
     }
 
@@ -54,19 +54,14 @@ export class InputManager
     }
 
     public touchstart = (e: TouchEvent) => {
-        //e.preventDefault();
-        //alert("touch start");
         this.touchStartAt = Date.now();
     }
 
     public touchend = (e: TouchEvent) => {
-        //e.preventDefault();
         if(Date.now() - this.touchStartAt < this.longTouchDuration) {
-//alert("short touch " + JSON.stringify(e));
-        this.firePrimaryMouseDownEvent(e.changedTouches[0].clientX, e.changedTouches[0].clientY); // fire primary mouse click event
+            this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
         } else {
-//alert("long touch x=" + e.touches[0].clientX + " y=" + e.touches[0].clientY);
-            this.fireSecondaryMouseDownEvent(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            this.fireSecondaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY);
         }
     }
 

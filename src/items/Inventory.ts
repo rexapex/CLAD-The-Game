@@ -4,6 +4,20 @@ export class Inventory
 {
     private items = new Array<Item>(9); // MAX_NUM_ITEMS = 9
 
+    public containsItem(item: Item): boolean
+    {
+        if(item != null) {
+            for(let index = 0; index < this.items.length; index ++)
+            {
+                if(this.items[index] === item) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
     public addItem(item: Item): boolean
     {
         if(item != null) {
@@ -26,7 +40,7 @@ export class Inventory
             if(this.items[index] === item) {
                 console.log("removed " + item.getName());
                 this.items[index] = null;
-                return this.items[index];
+                return item;
             }
         }
         return null;
@@ -43,14 +57,17 @@ export class Inventory
         return null;
     }
 
-    public moveItem(item: Item, index: number): void
+    public moveItem(item: Item, index: number): boolean
     {
+        console.log("selected", item);
         if(this.items[index] == null) { // if new itemslot is free
             let x = this.removeItem(item);
             if(x != null) { // check the player actually had the item
                 this.items[index] = item;
             }
+            return true;
         }
+        return false;
     }
 
     public clear(): void

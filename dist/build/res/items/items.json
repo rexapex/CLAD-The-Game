@@ -9,15 +9,13 @@
         "0.0.1-002": {
             "type": "STD",
             "name": "Wrench",
-            "examine_text": "It would be a pain to lose this",
-            "examine_audio": "res/audio/eng/clad_voice_lines/It would be a pain to lose this.m4a",
+            "examine_text": "It would be pain to lose this",
             "image": "res/images/wrench.png"
         },
         "0.0.1-003": {
             "type": "STD",
             "name": "A Nasty Surprise",
-            "examine_text": "Mhmm, delicious...",
-            "examine_audio": "res/audio/eng/clad_voice_lines/Mmm, delicious.m4a",
+            "examine_text": "Tasty...",
             "image": "res/images/wrench_sandwich.png"
         }
     },
