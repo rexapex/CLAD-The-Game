@@ -15,7 +15,7 @@ export class InputManager
             document.addEventListener("touchstart", this.touchstart);
             document.addEventListener("touchend", this.touchend);
             document.addEventListener("touchcancel", this.touchend);
-            document.addEventListener("touchmove", this.touchmove);
+            //document.addEventListener("touchmove", this.touchmove);
         // }
 
         this.touchStartAt = 0;
@@ -54,14 +54,19 @@ export class InputManager
     }
 
     public touchstart = (e: TouchEvent) => {
+        //e.preventDefault();
+        //alert("touch start");
         this.touchStartAt = Date.now();
     }
 
     public touchend = (e: TouchEvent) => {
+        //e.preventDefault();
         if(Date.now() - this.touchStartAt < this.longTouchDuration) {
-            this.firePrimaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY); // fire primary mouse click event
+//alert("short touch " + JSON.stringify(e));
+        this.firePrimaryMouseDownEvent(e.changedTouches[0].clientX, e.changedTouches[0].clientY); // fire primary mouse click event
         } else {
-            this.fireSecondaryMouseDownEvent(e.touches[0].clientX, e.touches[0].clientY);
+//alert("long touch x=" + e.touches[0].clientX + " y=" + e.touches[0].clientY);
+            this.fireSecondaryMouseDownEvent(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
         }
     }
 
