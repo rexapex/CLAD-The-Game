@@ -509,14 +509,18 @@ document.getElementById("exitbtn").onclick = () => {
 function loadLocalGameSave()
 {
     if(typeof(Storage) !== "undefined") {
-        const save1 = JSON.parse(localStorage.save1);
-        console.log(save1);
+        if(localStorage.save1 != null) {
+            const save1 = JSON.parse(localStorage.save1);
+            console.log(save1);
 
-        // load the player's items
-        for(const itemid of save1.invent)
-        {
-            console.log(itemid);
-            invent.addItem(items[itemid]);
+            // load the player's items
+            for(const itemid of save1.invent)
+            {
+                if(itemid != null) {
+                    console.log(itemid);
+                    invent.addItem(items[itemid]);
+                }
+            }
         }
     } else {
         console.log("error: no local storage to load");
