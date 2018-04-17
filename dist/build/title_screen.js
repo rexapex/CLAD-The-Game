@@ -5,17 +5,26 @@
 
 // load the last save
 document.getElementById("continuebtn").onclick = () => {
-    alert("continuebtn clicked");
+    if(typeof(Storage) !== "undefined") {
+        if(localStorage.lastSavedIndex != null) {
+            sessionStorage.saveToLoadIndex = localStorage.lastSavedIndex;
+        } else {
+            sessionStorage.saveToLoadIndex = null;
+        }
+        window.location = "clad.html";
+    } else {
+        console.log("error: no local storage to load");
+    }
 };
 
 // create a blank save game
 document.getElementById("newbtn").onclick = () => {
-    alert("newbtn clicked");
+    window.location = "clad.html";
 };
 
 // present the user with a list of saves to load
 document.getElementById("loadbtn").onclick = () => {
-    alert("loadbtn clicked");
+    window.location = "clad.html";
 };
 
 // TODO - either remove or add customisable settings

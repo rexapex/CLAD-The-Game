@@ -499,7 +499,7 @@ function onItemClick(itembtn: HTMLButtonElement, item: Item, evt: MouseEvent)
 }
 
 document.getElementById("savebtn").onclick = () => {
-    saveGameLocally();
+    saveGameLocally(localStorage.lastSavedIndex);
 };
 
 document.getElementById("exitbtn").onclick = () => {
@@ -508,6 +508,8 @@ document.getElementById("exitbtn").onclick = () => {
 
 function loadLocalGameSave()
 {
+    console.log("local storage", localStorage);
+    console.log("session storage", sessionStorage);
     if(typeof(Storage) !== "undefined") {
         // get a list of game saves
         const saves = JSON.parse(localStorage.saves);
@@ -574,23 +576,26 @@ function saveGameLocally(overwriteIndex: number = undefined)
         if(localStorage.saves == null) {
             // create an array of saves containing the new save
             localStorage.saves = JSON.stringify([save1]);
+            localStorage.lastSavedIndex = 0;
         } else {
             let saves = JSON.parse(localStorage.saves);
             if(overwriteIndex != null) {
                 // overwrite the save specified
                 if(saves.length > overwriteIndex) {
                     saves[overwriteIndex] = save1;
+                    localStorage.lastSavedIndex = overwriteIndex;
                 } else {
                     saves.push(save1);
+                    localStorage.lastSavedIndex = saves.length - 1;
                 }
             } else {
                 // add the new save to the save games list
                 saves.push(save1);
+                localStorage.lastSavedIndex = saves.length - 1;
             }
             // restore the save data
             localStorage.saves = JSON.stringify(saves);
         }
-
 
     } else {
         console.log("error: no local storage support");
