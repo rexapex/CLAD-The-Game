@@ -1,0 +1,20 @@
+{
+    "frames": {
+        "animated_00": {
+            "frame": {"x": 0, "y": 0, "w": 250, "h": 540},
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {"x": 0, "y": 0, "w": 250, "h": 540},
+            "sourceSize": {"w": 250, "h": 540},
+            "frameDuration": 3000
+        },
+        "animated_01": {
+            "frame": {"x": 250, "y": 0, "w": 250, "h": 540},
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {"x": 0, "y": 0, "w": 250, "h": 540},
+            "sourceSize": {"w": 250, "h": 540},
+            "frameDuration": 1250
+        }
+    }
+}

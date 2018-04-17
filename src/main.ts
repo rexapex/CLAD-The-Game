@@ -509,16 +509,22 @@ document.getElementById("exitbtn").onclick = () => {
 function loadLocalGameSave()
 {
     if(typeof(Storage) !== "undefined") {
-        if(localStorage.save1 != null) {
-            const save1 = JSON.parse(localStorage.save1);
-            console.log(save1);
+        // get a list of game saves
+        const saves = JSON.parse(localStorage.saves);
 
-            // load the player's items
-            for(const itemid of save1.invent)
-            {
-                if(itemid != null) {
-                    console.log(itemid);
-                    invent.addItem(items[itemid]);
+        // determine which save game to load
+        if(sessionStorage.saveToLoadIndex != null) {
+            if(saves.length > sessionStorage.saveToLoadIndex) {
+                // get the correct save game
+                const save = saves[sessionStorage.saveToLoadIndex];
+
+                // load the player's items
+                for(const itemid of save.invent)
+                {
+                    if(itemid != null) {
+                        console.log(itemid);
+                        invent.addItem(items[itemid]);
+                    }
                 }
             }
         }
@@ -528,7 +534,7 @@ function loadLocalGameSave()
 }
 
 // save the game locally
-function saveGameLocally()
+function saveGameLocally(overwriteIndex: number = undefined)
 {
     if(typeof(Storage) !== "undefined") {
         console.log("saving game locally");
@@ -565,7 +571,25 @@ function saveGameLocally()
         // TODO - make a note of any interactable sprites which have had their interactions used up
         // TODO - make a note of any receive item dialogs which have been used up
 
-        localStorage.save1 = JSON.stringify(save1);
+        if(localStorage.saves == null) {
+            // create an array of saves containing the new save
+            localStorage.saves = JSON.stringify([save1]);
+        } else {
+            let saves = JSON.parse(localStorage.saves);
+            if(overwriteIndex != null) {
+                // overwrite the save specified
+                if(saves.length > overwriteIndex) {
+                    saves[overwriteIndex] = save1;
+                } else {
+                    saves.push(save1);
+                }
+            } else {
+                // add the new save to the save games list
+                saves.push(save1);
+            }
+            // restore the save data
+            localStorage.saves = JSON.stringify(saves);
+        }
 
 
     } else {

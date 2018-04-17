@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta charset="UTF-8">
+    <script>
+        function BlockMove(event) {
+            // Tell Safari not to move the window.
+            event.preventDefault() ;
+        }
+    </script>
+    <link rel="apple-touch-icon" href="./res/images/player_head.png" />
+    <title>CLAD in Steel</title>
+    <style>
+        body {
+            background-color: #525252;
+        }
+
+        #background_img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            height: 95vh !important;
+            width: auto;
+            max-width: 1920px;
+            max-height: 1080px;
+        }
+
+        #menu {
+            z-index: 1;
+            background: rgba(0.1, 0.1, 0.1, 0.3);
+            position: fixed;
+            width: auto;
+
+            padding-left: 25px;
+            padding-right: 25px;
+            padding-top: 25px;
+            padding-bottom: 25px;
+
+            /* position the div */
+            margin-left: auto;
+            margin-right: auto;
+            bottom: 0;
+        }
+
+        .menubtn {
+            z-index: 1;
+            width: auto;
+            height: 5vh;
+            font-size: 2vh;
+            opacity: 0.9;
+            /*border: none !important;*/
+            /*background: transparent;*/
+            background-size: 10vh 10vh;
+            margin-right: 25px;
+        }
+    </style>
+</head>
+<body>
+    <img id="background_img" src="res/images/title_screen.png"><img>
+    <div id="menu">
+        <button id="continuebtn" class="menubtn">Continue</button>
+        <button id="newbtn" class="menubtn">New Game</button>
+        <button id="loadbtn" class="menubtn">Load Game</button>
+        <button id="settingsbtn" class="menubtn">Settings</button>
+    </div>
+    <script src="title_screen.js"></script>
+</body>
