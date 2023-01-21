@@ -5,7 +5,7 @@
   "main": "src/main.ts",
   "dependencies": {
     "ts-loader": "^4.0.1",
-    "webpack": "^4.0.1"
+    "webpack": "^4.46.0"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.0"
