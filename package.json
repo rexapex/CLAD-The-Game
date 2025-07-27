@@ -4,8 +4,8 @@
   "description": "The Adventures of Quacker Quagmire and Charlie Duck",
   "main": "src/main.ts",
   "dependencies": {
-    "ts-loader": "^4.0.1",
-    "webpack": "^4.46.0"
+    "ts-loader": "^9.5.2",
+    "webpack": "^5.100.2"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.0"
